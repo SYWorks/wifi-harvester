@@ -193,7 +193,7 @@ function ParseNotAssociated {
 	LTS=`echo $LTS`
 	ESL=${#NSESSID}
 	OUI=`echo $CLNMAC | sed 's/://g' | cut -c 1-6`
-	OUIName=`cat $FolderDB/mac-out.db | grep $OUI | awk '{print $2" "$3" "$4" "$5" "$6" "$7}'`
+	OUIName=`cat $FolderDB/mac-oui.db | grep $OUI | awk '{print $2" "$3" "$4" "$5" "$6" "$7}'`
 	OUIName=`echo $OUIName`
 	Convert_Signal $POWER
 
