@@ -19,7 +19,9 @@ To run the script, do the following
 
 6) Copy "mac-oui.db" to "~/SYWorks/Database" 
 
-7) Run using "bash Probing.sh" in Kali Linux or "sh Probing.sh" in Backtrack..
+7) Enable a monitor device by using "airmon-ng"
+
+8) Run using "bash Probing.sh" in Kali Linux or "sh Probing.sh" in Backtrack..
 
 
 
