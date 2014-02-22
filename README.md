@@ -24,4 +24,10 @@ To run the script, do the following
 8) Run using "bash Probing.sh" in Kali Linux or "sh Probing.sh" in Backtrack..
 
 
+Visit http://syworks.blogspot.com/2014/02/network-harvester.html for detail.
+
+Support this project by clicking a Like on https://www.facebook.com/media/set/?set=a.788982194463217.1073741833.281645261863582 and support my page at https://www.facebook.com/syworks
+
+Thank you... 
+
 
