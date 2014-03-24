@@ -1,4 +1,5 @@
 #! /usr/bin/python
+#
 
 #############
 # MODULES #
@@ -21,11 +22,11 @@ import random
 import urllib
 from subprocess import Popen, call, PIPE
 
-appver="1.0, R.1"
+appver="1.0, R.2"
 apptitle="WiFi-Harvester"
 appDesc="- The Network Detail Harvesting System"
 appcreated="28 Feb 2014"
-appupdated="22 Mar 2014"
+appupdated="24 Mar 2014"
 appnote="Written By SY Chua, " + appcreated + ", Updated " + appupdated
 appdescription="The Network Harvester is use to collect detailed information on Access Points / Wireless Stations"
 
@@ -3836,109 +3837,107 @@ def DisplayInfrastructure():
             if ListInfo_Enriched[x]=="Yes":
                 EnrichData=fcolor.BIRed + " *"
                 DisplayEnriched=DisplayEnriched+1
-                if __builtin__.NETWORK_VIEW=="1" or __builtin__.NETWORK_VIEW=="3":
-                    if __builtin__.HIDE_INACTIVE_SSID=="No":
-                        InfoColor=fcolor.SGreen
-                    else:
-                        InfoColor=fcolor.SWhite
+            if __builtin__.NETWORK_VIEW=="1" or __builtin__.NETWORK_VIEW=="3":
+                if __builtin__.HIDE_INACTIVE_SSID=="No":
+                    InfoColor=fcolor.SGreen
                 else:
-                    if __builtin__.HIDE_INACTIVE_SSID=="No" or __builtin__.HIDE_INACTIVE_STN=="No":
-                        InfoColor=fcolor.SGreen
-                    else:
-                        InfoColor=fcolor.SWhite
-                DisplayCount += 1
-                DontShowClient=0
-                BSSIDColor=InfoColor
-                ClientColor=InfoColor
-                ESSIDColor=fcolor.SPink
-                OUIColor=fcolor.SCyan
-                if int(ListInfo_ConnectedClient[x])>0:
-                    BSSIDColor=fcolor.BYellow
-                    ClientColor=fcolor.BGreen
-                    ESSIDColor=fcolor.BPink
-                    OUIColor=fcolor.BWhite
-                DESSID=str(ListInfo_ESSID[x])
-                if str(ListInfo_ESSID[x])=="":
-                    DESSID=fcolor.SBlack + "<<NO ESSID>>                     "
+                    InfoColor=fcolor.SWhite
+            else:
+                if __builtin__.HIDE_INACTIVE_SSID=="No" or __builtin__.HIDE_INACTIVE_STN=="No":
+                    InfoColor=fcolor.SGreen
                 else:
-                    DESSID=str(DESSID).ljust(33)
-                if int(__builtin__.ListInfo_SSIDTimeGap[x]) <= int(__builtin__.REMOVE_AFTER_MIN):
-                    Cipher=ListInfo_Cipher[x]
-                    if Cipher=="CCMP WRAP TKIP":
-                        __builtin__.ListInfo_Cipher[x]="C/T/WRAP"
-
-                    print  BSSIDColor + str(ListInfo_BSSID[x]).ljust(19) + ClientColor + str(ListInfo_ConnectedClient[x]).ljust(5) + InfoColor + str(CPrivacy) + str(ListInfo_Privacy[x]).ljust(6) + InfoColor + str(Cipher).ljust(12) + str(ListInfo_Auth[x]).ljust(10) + str(ListInfo_Channel[x]).ljust(5) + str(ListInfo_BestQuality[x]).ljust(7) + str(ListInfo_QualityRange[x]) + InfoColor + "\t " + str(ListInfo_Cloaked[x]).ljust(6) + str(ListInfo_WPS[x]).ljust(5)  + str(ListInfo_WPSVer[x]).ljust(5) + str(ListInfo_WPSLock[x]).ljust(5) + str(EnrichData) + ESSIDColor + str(DESSID) + OUIColor + str(ListInfo_BSSID_OUI[x]) 
+                    InfoColor=fcolor.SWhite
+            DisplayCount += 1
+            DontShowClient=0
+            BSSIDColor=InfoColor
+            ClientColor=InfoColor
+            ESSIDColor=fcolor.SPink
+            OUIColor=fcolor.SCyan
+            if int(ListInfo_ConnectedClient[x])>0:
+                BSSIDColor=fcolor.BYellow
+                ClientColor=fcolor.BGreen
+                ESSIDColor=fcolor.BPink
+                OUIColor=fcolor.BWhite
+            DESSID=str(ListInfo_ESSID[x])
+            if str(ListInfo_ESSID[x])=="":
+                DESSID=fcolor.SBlack + "<<NO ESSID>>                     "
+            else:
+                DESSID=str(DESSID).ljust(33)
+            if int(__builtin__.ListInfo_SSIDTimeGap[x]) <= int(__builtin__.REMOVE_AFTER_MIN):
+                Cipher=ListInfo_Cipher[x]
+                if Cipher=="CCMP WRAP TKIP":
+                    __builtin__.ListInfo_Cipher[x]="C/T/WRAP"
+                print  BSSIDColor + str(ListInfo_BSSID[x]).ljust(19) + ClientColor + str(ListInfo_ConnectedClient[x]).ljust(5) + InfoColor + str(CPrivacy) + str(ListInfo_Privacy[x]).ljust(6) + InfoColor + str(Cipher).ljust(12) + str(ListInfo_Auth[x]).ljust(10) + str(ListInfo_Channel[x]).ljust(5) + str(ListInfo_BestQuality[x]).ljust(7) + str(ListInfo_QualityRange[x]) + InfoColor + "\t " + str(ListInfo_Cloaked[x]).ljust(6) + str(ListInfo_WPS[x]).ljust(5)  + str(ListInfo_WPSVer[x]).ljust(5) + str(ListInfo_WPSLock[x]).ljust(5) + str(EnrichData) + ESSIDColor + str(DESSID) + OUIColor + str(ListInfo_BSSID_OUI[x]) 
+            else:
+                if __builtin__.HIDE_INACTIVE_SSID=="Yes":
+                    DontShowClient=1
+                    DisplayNotShownSSID=DisplayNotShownSSID+1
                 else:
-                    if __builtin__.HIDE_INACTIVE_SSID=="Yes":
-                        DontShowClient=1
-                        DisplayNotShownSSID=DisplayNotShownSSID+1
-                    else:
-                        if ListInfo_Enriched[x]=="Yes":
-                            EnrichData=fcolor.SBlack + " *"
-                        print  fcolor.BIGray + str(ListInfo_BSSID[x]).ljust(19) + str(ListInfo_ConnectedClient[x]).ljust(5) + RemoveColor(str(CPrivacy)) + RemoveColor(str(ListInfo_Privacy[x])).ljust(6) + str(ListInfo_Cipher[x]).ljust(12) + str(ListInfo_Auth[x]).ljust(10) + str(ListInfo_Channel[x]).ljust(5) + str(ListInfo_BestQuality[x]).ljust(7) + RemoveColor(str(ListInfo_QualityRange[x])) + "\t " + str(ListInfo_Cloaked[x]).ljust(6) + str(ListInfo_WPS[x]).ljust(5)  + str(ListInfo_WPSVer[x]).ljust(5) + str(ListInfo_WPSLock[x]).ljust(5) +  str(EnrichData) + str(DESSID) + str(ListInfo_BSSID_OUI[x])
-                        print  fcolor.BIGray + "\t\t\tFirst Seen : " + fcolor.SBlack + ListInfo_FirstSeen[x].ljust(24) + fcolor.BIGray + "\tLast Seen : " + fcolor.SBlack + ListInfo_LastSeen[x] + fcolor.BIGray + "\t[ " + str(ListInfo_SSIDTimeGap[x]) + " min ago ]"
-                if __builtin__.NETWORK_VIEW=="4" or __builtin__.NETWORK_VIEW=="5":
-                    if DontShowClient!=1:
-                        cln=0
-                        ClientCt=0
-                        DisplayClientCount=0
-                        ToDisplayClient="1"
-                        while cln < len(ListInfo_STATION):
-                            if ListInfo_CBSSID[cln].find("Not Associated")!=-1:
-                                UNASSOC=1
-                            if ListInfo_BSSID[x]==ListInfo_CBSSID[cln]:
-                                ToDisplayClient="1"
-                                if ToDisplayClient=="1" and __builtin__.NETWORK_PROBE_FILTER!="ALL":
-                                    ToDisplayClient=""
-                                    if __builtin__.NETWORK_PROBE_FILTER=="Yes":
-                                        if len(ListInfo_PROBE[cln])>0:
-                                            ToDisplayClient="1"
-                                    elif __builtin__.NETWORK_PROBE_FILTER=="No":
-                                        if len(ListInfo_PROBE[cln])==0:
-                                            ToDisplayClient="1"
-                                if ToDisplayClient=="1" and __builtin__.NETWORK_ASSOCIATED_FILTER!="ALL":
-                                    ToDisplayClient=""
-                                    if __builtin__.NETWORK_ASSOCIATED_FILTER=="Yes":
-                                        if ListInfo_CBSSID[cln].find("not associated")==-1:
-                                            ToDisplayClient="1"
-                                    if __builtin__.NETWORK_ASSOCIATED_FILTER=="No":
-                                        if ListInfo_CBSSID[cln].find("Not Associated")!=-1:
-                                            ToDisplayClient="1"
-                                if ToDisplayClient=="1" and __builtin__.NETWORK_UNASSOCIATED_FILTER!="ALL":
-                                    ToDisplayClient=""
-                                    if __builtin__.NETWORK_UNASSOCIATED_FILTER=="Yes":
-                                        if ListInfo_CBSSID[cln].find("Not Associated")!=-1:
-                                            ToDisplayClient="1"
-                                    if __builtin__.NETWORK_UNASSOCIATED_FILTER=="No":
-                                        if ListInfo_CBSSID[cln].find("Not Associated")==-1:
-                                            ToDisplayClient="1"
-                                if  ToDisplayClient=="1" and __builtin__.NETWORK_CSIGNAL_FILTER!="ALL":
-                                    ToDisplayClient=""    
-                                    if ListInfo_CQualityRange[cln].find(__builtin__.NETWORK_CSIGNAL_FILTER)!=-1:
+                    if ListInfo_Enriched[x]=="Yes":
+                        EnrichData=fcolor.SBlack + " *"
+                    print  fcolor.BIGray + str(ListInfo_BSSID[x]).ljust(19) + str(ListInfo_ConnectedClient[x]).ljust(5) + RemoveColor(str(CPrivacy)) + RemoveColor(str(ListInfo_Privacy[x])).ljust(6) + str(ListInfo_Cipher[x]).ljust(12) + str(ListInfo_Auth[x]).ljust(10) + str(ListInfo_Channel[x]).ljust(5) + str(ListInfo_BestQuality[x]).ljust(7) + RemoveColor(str(ListInfo_QualityRange[x])) + "\t " + str(ListInfo_Cloaked[x]).ljust(6) + str(ListInfo_WPS[x]).ljust(5)  + str(ListInfo_WPSVer[x]).ljust(5) + str(ListInfo_WPSLock[x]).ljust(5) +  str(EnrichData) + str(DESSID) + str(ListInfo_BSSID_OUI[x])
+                    print  fcolor.BIGray + "\t\t\tFirst Seen : " + fcolor.SBlack + ListInfo_FirstSeen[x].ljust(24) + fcolor.BIGray + "\tLast Seen : " + fcolor.SBlack + ListInfo_LastSeen[x] + fcolor.BIGray + "\t[ " + str(ListInfo_SSIDTimeGap[x]) + " min ago ]"
+            if __builtin__.NETWORK_VIEW=="4" or __builtin__.NETWORK_VIEW=="5":
+                if DontShowClient!=1:
+                    cln=0
+                    ClientCt=0
+                    DisplayClientCount=0
+                    ToDisplayClient="1"
+                    while cln < len(ListInfo_STATION):
+                        if ListInfo_CBSSID[cln].find("Not Associated")!=-1:
+                            UNASSOC=1
+                        if ListInfo_BSSID[x]==ListInfo_CBSSID[cln]:
+                            ToDisplayClient="1"
+                            if ToDisplayClient=="1" and __builtin__.NETWORK_PROBE_FILTER!="ALL":
+                                ToDisplayClient=""
+                                if __builtin__.NETWORK_PROBE_FILTER=="Yes":
+                                    if len(ListInfo_PROBE[cln])>0:
                                         ToDisplayClient="1"
-                                if ToDisplayClient=="1":
-                                    MACCOLOR=fcolor.SGreen
-                                    SELFMAC=""
-                                    if ListInfo_STATION[cln]==__builtin__.SELECTED_MANIFACE_MAC or ListInfo_STATION[cln]==__builtin__.SELECTED_MON_MAC:
-                                        MACCOLOR=fcolor.BRed
-                                        SELFMAC=fcolor.BWhite + " [ " + fcolor.BRed + "Your Interface MAC" + fcolor.BWhite + " ]"
-
-                                    if int(__builtin__.ListInfo_CTimeGap[cln]) <= int(__builtin__.REMOVE_AFTER_MIN):
+                                elif __builtin__.NETWORK_PROBE_FILTER=="No":
+                                    if len(ListInfo_PROBE[cln])==0:
+                                        ToDisplayClient="1"
+                            if ToDisplayClient=="1" and __builtin__.NETWORK_ASSOCIATED_FILTER!="ALL":
+                                ToDisplayClient=""
+                                if __builtin__.NETWORK_ASSOCIATED_FILTER=="Yes":
+                                    if ListInfo_CBSSID[cln].find("not associated")==-1:
+                                        ToDisplayClient="1"
+                                if __builtin__.NETWORK_ASSOCIATED_FILTER=="No":
+                                    if ListInfo_CBSSID[cln].find("Not Associated")!=-1:
+                                        ToDisplayClient="1"
+                            if ToDisplayClient=="1" and __builtin__.NETWORK_UNASSOCIATED_FILTER!="ALL":
+                                ToDisplayClient=""
+                                if __builtin__.NETWORK_UNASSOCIATED_FILTER=="Yes":
+                                    if ListInfo_CBSSID[cln].find("Not Associated")!=-1:
+                                        ToDisplayClient="1"
+                                if __builtin__.NETWORK_UNASSOCIATED_FILTER=="No":
+                                    if ListInfo_CBSSID[cln].find("Not Associated")==-1:
+                                        ToDisplayClient="1"
+                            if  ToDisplayClient=="1" and __builtin__.NETWORK_CSIGNAL_FILTER!="ALL":
+                                ToDisplayClient=""    
+                                if ListInfo_CQualityRange[cln].find(__builtin__.NETWORK_CSIGNAL_FILTER)!=-1:
+                                    ToDisplayClient="1"
+                            if ToDisplayClient=="1":
+                                MACCOLOR=fcolor.SGreen
+                                SELFMAC=""
+                                if ListInfo_STATION[cln]==__builtin__.SELECTED_MANIFACE_MAC or ListInfo_STATION[cln]==__builtin__.SELECTED_MON_MAC:
+                                    MACCOLOR=fcolor.BRed
+                                    SELFMAC=fcolor.BWhite + " [ " + fcolor.BRed + "Your Interface MAC" + fcolor.BWhite + " ]"
+                                if int(__builtin__.ListInfo_CTimeGap[cln]) <= int(__builtin__.REMOVE_AFTER_MIN):
+                                    DisplayClientCount=DisplayClientCount+1
+                                    ClientCt=ClientCt+1
+                                    print fcolor.SWhite + "   [" + fcolor.SGreen + str(ClientCt) + fcolor.SWhite + "]" + fcolor.BWhite + "\t  Client   :  - " + MACCOLOR + str(ListInfo_STATION[cln]).ljust(33) + str(ListInfo_CBestQuality[cln]).ljust(7) + str(ListInfo_CQualityRange[cln]) + fcolor.CDim + fcolor.SGreen + "\t " + str(ListInfo_CLastSeen[cln]) + fcolor.CDim + fcolor.Cyan + "\t" + str(ListInfo_COUI[cln]) + str(SELFMAC)
+                                else:
+                                    if __builtin__.HIDE_INACTIVE_STN!="Yes":
                                         DisplayClientCount=DisplayClientCount+1
                                         ClientCt=ClientCt+1
-                                        print fcolor.SWhite + "   [" + fcolor.SGreen + str(ClientCt) + fcolor.SWhite + "]" + fcolor.BWhite + "\t  Client   :  - " + MACCOLOR + str(ListInfo_STATION[cln]).ljust(33) + str(ListInfo_CBestQuality[cln]).ljust(7) + str(ListInfo_CQualityRange[cln]) + fcolor.CDim + fcolor.SGreen + "\t " + str(ListInfo_CLastSeen[cln]) + fcolor.CDim + fcolor.Cyan + "\t" + str(ListInfo_COUI[cln]) + str(SELFMAC)
-                                    else:
-                                        if __builtin__.HIDE_INACTIVE_STN!="Yes":
-                                            DisplayClientCount=DisplayClientCount+1
-                                            ClientCt=ClientCt+1
-                                            print fcolor.SBlack + "   [" + str(ClientCt) + "]" + "\t  Client   :  - " + str(ListInfo_STATION[cln]).ljust(33) + str(ListInfo_CBestQuality[cln]).ljust(7) + RemoveColor(str(ListInfo_CQualityRange[cln])) + "\t " + str(ListInfo_CLastSeen[cln]) + "\t" + str(ListInfo_COUI[cln]) + str(SELFMAC)
-                                    if ListInfo_PROBE[cln]!="" and __builtin__.NETWORK_VIEW!="5":
-                                            if int(__builtin__.ListInfo_CTimeGap[cln]) <= int(__builtin__.REMOVE_AFTER_MIN):
-                                                    print fcolor.SWhite + "          Probe    :  - " + fcolor.SBlue + str(ListInfo_PROBE[cln])
-                                            else:
-                                                if __builtin__.HIDE_INACTIVE_STN!="Yes":
-                                                    print fcolor.SBlack + "          Probe    :  - " + fcolor.SBlack + str(ListInfo_PROBE[cln])
-                            cln = cln + 1
+                                        print fcolor.SBlack + "   [" + str(ClientCt) + "]" + "\t  Client   :  - " + str(ListInfo_STATION[cln]).ljust(33) + str(ListInfo_CBestQuality[cln]).ljust(7) + RemoveColor(str(ListInfo_CQualityRange[cln])) + "\t " + str(ListInfo_CLastSeen[cln]) + "\t" + str(ListInfo_COUI[cln]) + str(SELFMAC)
+                                if ListInfo_PROBE[cln]!="" and __builtin__.NETWORK_VIEW!="5":
+                                        if int(__builtin__.ListInfo_CTimeGap[cln]) <= int(__builtin__.REMOVE_AFTER_MIN):
+                                                print fcolor.SWhite + "          Probe    :  - " + fcolor.SBlue + str(ListInfo_PROBE[cln])
+                                        else:
+                                            if __builtin__.HIDE_INACTIVE_STN!="Yes":
+                                                print fcolor.SBlack + "          Probe    :  - " + fcolor.SBlack + str(ListInfo_PROBE[cln])
+                        cln = cln + 1
             else:
                 DisplayNotShownSSID += 1
             x=x+1
@@ -4619,6 +4618,7 @@ def RunIWList():
     __builtin__.IWListProc=str(__builtin__.IWListProc)
     if str(readout)==str(__builtin__.IWListProc):
         os.killpg(int(__builtin__.IWListProc), signal.SIGTERM)
+
     if __builtin__.SELECTED_MANIFACE!="":
         cmdLine="xterm -geometry 100x3-0-200 -iconic -bg black -fg white -fn 5x8 -title 'WIDS - Monitoring AP' -hold -e 'iwlist " + __builtin__.SELECTED_MANIFACE + " scanning > " + str(__builtin__.TMP_IWList_DUMP) + "'"
         ps=subprocess.Popen(cmdLine , shell=True, stdout=subprocess.PIPE, preexec_fn=os.setsid)	
@@ -4866,10 +4866,6 @@ def WriteAllStationDB():
                             if len(tmplist)>2:
 
                                 if tmplist[0]==str(ListInfo_STATION[x]) and tmplist[1]==str(ListInfo_CBSSID[x]):
-                                    if tmplist[2]!=str(ListInfo_CESSID[x]) and tmplist[2]!="" and str(ListInfo_CESSID[x])!="":
-                                        print "Connect x       : " + str(x)
-                                        print "Connect Current : " + str(ListInfo_STATION[x]) + " / " + str(ListInfo_CBSSID[x]) + " / " + str(ListInfo_CESSID[x])
-                                        print "Connect In File : " + str(tmplist[0]) + " / " + str(tmplist[1]) + " / " + str(tmplist[2])
                                     if IsAscii(tmplist[2])==True and IsAscii(ListInfo_CESSID[x])==False:
                                         SkipWrite=1
 
@@ -5797,6 +5793,7 @@ def ExtractDump():
                         if len(ESSID)>=32:
                             ESSID=ESSID[:-32]
                         x=0
+
                         foundloc=0
                         Skip=""
                         mi=FindMACIndex(BSSID,ListInfo_BSSID)
@@ -5805,11 +5802,8 @@ def ExtractDump():
                             Skip="1"
                             if IsAscii(ESSID)==True and ESSID.find("\\x")==-1:
                                 if ListInfo_BSSID[foundloc]==BSSID:
-                                    ESSID=ListInfo_ESSID[foundloc]
-                                else:
-                                    print "ListInfo_BSSID[foundloc] : " + str(ListInfo_BSSID[foundloc])
-                                    print "BSSID                    : " + str(BSSID)
-                                    printc ("x","","")
+                                    if ListInfo_ESSID[foundloc]!="" and IsAscii(ESSID)==True and ESSID.find("\\x")==-1:
+                                        ESSID=ListInfo_ESSID[foundloc]
                         QualityPercent=0
                         QRange=fcolor.SBlack + "Unknown"
                         if len(LineList[21])>1 and len(LineList[21])<4:
