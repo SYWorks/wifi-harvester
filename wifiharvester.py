@@ -1,5 +1,4 @@
 #! /usr/bin/python
-#
 
 #############
 # MODULES #
@@ -2743,8 +2742,9 @@ def exit_gracefully(code=0):
     time.sleep(0.1)
     ps=subprocess.Popen("killall 'tshark' > /dev/null 2>&1" , shell=True, stdout=subprocess.PIPE)	
     time.sleep(0.1)
-    print ""
-    print fcolor.BWhite + "Please support by liking my page at " + fcolor.BBlue + "https://www.facebook.com/syworks" +fcolor.BWhite + " (SYWorks-Programming)"
+    if __builtin__.ERRORFOUND!=1:
+        print ""
+        print fcolor.BWhite + "Please support by liking my page at " + fcolor.BBlue + "https://www.facebook.com/syworks" +fcolor.BWhite + " (SYWorks-Programming)"
 
     print fcolor.BRed + __builtin__.ScriptName + " Exited." 
     print ''
@@ -2904,6 +2904,10 @@ def CheckRequiredFiles():
         print ""
 	printc ("!!!",fcolor.BGreen + "The following file" + TXT_1 + " required by " + apptitle + " " + TXT_2 + " not found:- " ,"")
         print ERROR_MSG
+        print ""
+        printc ("..","Developer does not provide any support on how you could install all these application.","")
+        printc ("..","To save the hassle, run this script on Backtrack/Kali Linux as all these required applications are already preinstalled.","")
+        __builtin__.ERRORFOUND=1
         exit_gracefully(1)
     if IsFileDirExist(__builtin__.MACOUI)!="F":
         printc ("!!!","MAC OUI Database (Optional) not found !","")
@@ -3294,10 +3298,11 @@ def GetInterfaceList(cmdMode):
             printd ("Line : " + str(line))
             IFACE = line[:line.find(' ')]
             IFACE2=IFACE[:2].upper()
-            printd ("IFACE : " + str(IFACE))
-            printd ("IFACE2 : " + str(IFACE2))
+#            print "IFACE : " + str(IFACE)
+#            print "IFACE2 : " + str(IFACE2)
+#            printc ("x","","")
 
-            if IFACE2!="ET" and IFACE2!="LO" and IFACE2!="VM" and IFACE2!="PP" and IFACE2!="AT":
+            if IFACE2!="ET" and IFACE2!="LO" and IFACE2!="VM" and IFACE2!="PP" and IFACE2!="AT" and IFACE2!="EN":
                 ps=subprocess.Popen("iwconfig " + str(IFACE) + "| grep -i 'Mode:' | tr -s ' ' | egrep -o 'Mode:..................' | cut -d ' ' -f1 | cut -d ':' -f2" , shell=True, stdout=subprocess.PIPE, stderr=open(os.devnull, 'w'))	
                 MODEN=ps.stdout.read().replace("\n","")
                 MODE=MODEN.upper()
@@ -4625,8 +4630,7 @@ def RunIWList():
         __builtin__.IWListProc=ps.pid
 
 def KillProc(ProcName):
-#    cmdLine="ps aux | grep xterm | grep -v '" + ProcName + "' | awk '{print $2}' | xargs kill -9"
-    cmdLine="ps aux | grep xterm | grep -v '" + ProcName + "' | awk '{print $2}' | xargs kill -9"
+    cmdLine="ps aux | grep xterm | grep -v '" + ProcName + "' | awk '{print $2}' | xargs kill -9 > /dev/null 2>&1"
     ps=subprocess.Popen(cmdLine , shell=True, stdout=subprocess.PIPE)	
     ps.wait()
 
@@ -4697,7 +4701,8 @@ def Main():
     WLANCt = GetInterfaceList("WLAN")
     if MonCt==0 and WLANCt==0:
         printc (".",fcolor.SRed + "No wireless interface detected !","")
-        exit(1)
+        __builtin__.ERRORFOUND=1
+        exit_gracefully(1)
 
     if MonCt==0 and WLANCt!=0:
         if __builtin__.SELECTED_IFACE=="":
@@ -6736,6 +6741,8 @@ __builtin__.TIMEOUT=20
 __builtin__.TIMES_BEFORE_UPDATE_AP_DB=10
 __builtin__.TIMES_BEFORE_UPDATE_STN_DB=5
 __builtin__.UPDATE_STN_COUNT=0
+__builtin__.TimeStart=""
+__builtin__.TimeEnd=""
 appdir="/SYWorks/WiFi-Harvester/"
 dbdir="/SYWorks/Database/"
 tmpdir=appdir + "tmp/"
@@ -6758,7 +6765,7 @@ __builtin__.SELECTED_MANIFACE_MAC=[]
 __builtin__.SELECTED_MON_MAC=[]
 __builtin__.MonitoringMACList=[]
 __builtin__.ScriptName=os.path.basename(__file__)
-__builtin__.RequiredFiles=['tshark', 'airodump-ng', 'iwconfig', 'ifconfig', 'packetforge-ng']
+__builtin__.RequiredFiles=['tshark', 'airodump-ng', 'aireplay-ng','aircrack-ng','iwconfig', 'ifconfig', 'xterm']
 __builtin__.Captured_CSV=tmpdir + "Collect-Dump-01.csv"
 __builtin__.NewCaptured_CSV=tmpdir + "Dumps.csv"
 __builtin__.SSID_CSV=tmpdir + "Dumps-SSID.csv"
@@ -6768,6 +6775,7 @@ __builtin__.NewCaptured_Kismet=tmpdir + "Dumps-kismet.csv"
 __builtin__.WPS_DUMP=tmpdir + "WPS-Dump"
 __builtin__.TMP_IWList_DUMP=tmpdir + "SSID.tmp"
 __builtin__.IWList_DUMP=tmpdir + "SSID"
+__builtin__.ERRORFOUND=0
 __builtin__.Infrastructure_DumpList = []
 __builtin__.Client_DumpList = []
 __builtin__.ListInfo_BSSIDTimes = []
@@ -6874,6 +6882,7 @@ __builtin__.AP_ESSIDList=[]
 __builtin__.AP_MODEList=[]
 __builtin__.AP_CHANNELList=[]
 __builtin__.AP_ENCTYPEList=[]
+
 
 
 if __name__ == '__main__':
